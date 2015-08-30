@@ -1827,6 +1827,7 @@ FieldMoveNames: ; 778d (1:778d)
 	db "DIG@"
 	db "TELEPORT@"
 	db "SOFTBOILED@"
+    db "ROCK SMASH@"
 
 PokemonMenuEntries: ; 77c2 (1:77c2)
 	db   "STATS"
@@ -1901,6 +1902,7 @@ FieldMoveDisplayData: ; 7823 (1:7823)
 	db DIG, $07, $0C
 	db TELEPORT, $08, $0A
 	db SOFTBOILED, $09, $08
+    db ROCK_SMASH, $0A, $08
 	db $ff ; list terminator
 
 

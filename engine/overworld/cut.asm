@@ -66,7 +66,140 @@ asm_ef82: ; ef82 (3:6f82)
 	ld a, $90
 	ld [hWY], a
 	call UpdateSprites
-	jp RedrawMapView
+    call RockSmashUsed
+    jp RedrawMapView
+
+RockSmashUsed:
+    call Random
+    ld b, a
+    and 128     ;50 % chance to encounter a wild Pokémon
+    ret z
+    ld a, b
+
+    and 7       ;We want to have a random number between 0 and 7
+    sla a       ;Multiply with 2
+    
+    ld [wWhichTrade], a
+
+    ld a, [W_CURMAP]
+    call RockSmashGetEncounterListIndex
+    ret nc ;Map has no Rock Smash encounters
+    
+    ld b, 0
+
+    ld hl, RockSmashEncounterListPointers
+    add hl, bc
+    ld a, [hl]
+    ld c, a
+
+    ld hl, RockSmashEncounterListMtMoon
+    add hl, bc
+
+    ld a, [wWhichTrade]
+    ld c, a
+    add hl, bc
+
+    ld a, [hli] ;Pokémon Level
+    ld b, a
+    ld a, [hl] ;Pokémon Species
+    ld c, a
+    push bc
+    call PlayCry
+    pop bc
+    ld a, b
+    ld [W_CURENEMYLVL], a
+    ld a, c
+    ld [W_CUROPPONENT], a
+    call InitWildBattle
+    ret
+
+RockSmashGetEncounterListIndex: ;the index is written to register c
+    ld c, 0
+    ld hl, RockSmashEncounterLocations
+    ld b, a
+.loop
+    ld a, [hli]
+    cp b
+    jr z, .end
+    inc c
+    inc a
+    jr nz, .loop
+    xor a
+    ret
+.end
+    scf
+    ret
+
+RockSmashEncounterLocations:
+    db PEWTER_CITY
+    db MT_MOON_3
+    db ROCK_TUNNEL_1
+    db SEAFOAM_ISLANDS_3
+    db SEAFOAM_ISLANDS_4
+    db SEAFOAM_ISLANDS_5
+    db VICTORY_ROAD_3
+    db ROCK_TUNNEL_2
+    db $ff
+
+RockSmashEncounterListPointers:
+    db 64
+    db 0
+    db 16
+    db 32
+    db 32
+    db 32
+    db 48
+    db 16
+  
+RockSmashEncounterListMtMoon: ;RockSmashEncounterListMtMoon+0
+	db 8,GEODUDE
+	db 8,GEODUDE
+    db 8,GEODUDE
+	db 9,GEODUDE
+    db 9,GEODUDE
+	db 8,KRABBY
+	db 8,GRAVELER
+    db 9,GRAVELER
+
+RockSmashEncounterListRockTunnel: ;RockSmashEncounterListMtMoon+16
+	db 18,GEODUDE
+	db 18,GEODUDE
+    db 18,GEODUDE
+	db 21,GEODUDE
+    db 21,GEODUDE
+	db 21,KRABBY
+	db 21,GRAVELER
+    db 23,GRAVELER
+
+RockSmashEncounterListSeafoamIslands: ;RockSmashEncounterListMtMoon+32
+	db 28,GEODUDE
+	db 28,GEODUDE
+    db 31,GRAVELER
+	db 31,GRAVELER
+    db 33,GRAVELER
+	db 31,KRABBY
+	db 31,KRABBY
+    db 37,KINGLER
+
+RockSmashEncounterListVictoryRoad: ;RockSmashEncounterListMtMoon+48
+	db 42,GEODUDE
+    db 42,GEODUDE
+	db 43,GRAVELER
+	db 43,GRAVELER
+	db 44,GRAVELER
+    db 44,GRAVELER
+	db 45,MAGCARGO
+    db 47,GOLEM
+
+RockSmashEncounterListPewterCity: ;RockSmashEncounterListMtMoon+64 ;for testing
+	db 6,ODDISH
+    db 7,ODDISH
+	db 7,ODDISH
+	db 8,ODDISH
+	db 8,ODDISH
+    db 8,ODDISH
+	db 8,ODDISH
+    db 8,GLOOM
 
 UsedCutText: ; eff2 (3:6ff2)
 	TX_FAR _UsedCutText

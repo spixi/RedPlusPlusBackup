@@ -261,4 +261,5 @@ endm
 	move AURORA_BEAM,  NO_ADDITIONAL_EFFECT,       100, FLYING,   100,  5 ; Aeroblast
 	move ROCK_THROW,   NO_ADDITIONAL_EFFECT,        60, ROCK,     100,  5 ; Ancient Power
 	move SURF,         CHARGE_EFFECT,               80, WATER,    100, 10 ; Dive (Unused)
+    move THRASH,       DEFENSE_DOWN_SIDE_EFFECT,    40, FIGHTING, 100, 15 ; Rock Smash
 	

@@ -260,4 +260,5 @@ PhysicalSpecialSplit: ;Determines if a move is Physical or Special
 	db SPECIAL ;Aeroblast
 	db SPECIAL ;AncientPower
 	db PHYSICAL;Dive (Unused)
+	db PHYSICAL;Rock Smash
     

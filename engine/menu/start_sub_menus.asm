@@ -130,6 +130,7 @@ StartMenu_Pokemon: ; 130a9 (4:70a9)
 	dw .dig
 	dw .teleport
 	dw .softboiled
+    dw .rocksmash
 .fly
 	bit 2,a ; does the player have the Thunder Badge?
 	jp z,.newBadgeRequired
@@ -151,6 +152,14 @@ StartMenu_Pokemon: ; 130a9 (4:70a9)
 	set 1,[hl]
 	jp StartMenu_Pokemon
 .cut
+	bit 1,a ; does the player have the Cascade Badge?
+	jp z,.newBadgeRequired
+	predef UsedCut
+	ld a,[wcd6a]
+	and a
+	jp z,.loop
+	jp CloseTextDisplay
+.rocksmash
 	bit 1,a ; does the player have the Cascade Badge?
 	jp z,.newBadgeRequired
 	predef UsedCut
